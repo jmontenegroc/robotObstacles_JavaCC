@@ -18,6 +18,15 @@ Modificado por Silvia Takahashi: Cambio en el lenguaje
 Abril: 2008 - Simplificado apra solo interpretaci�n
  **/
 
+
+
+
+/* INTEGRANTES PRACTICA 1
+Carlos Julio Pinto R. 201616667
+Juan Jose Montenegro 202012725
+*/
+
+
 options 
 {
 	LOOKAHEAD=1; 
@@ -181,7 +190,7 @@ TOKEN: /* NOMBRE DE CONDICIONES */
 	
 	void faceNorth():
 	{
-	  int f=1;
+	  
 	}
 	{
 		g = world.getFacing();
@@ -204,7 +213,6 @@ TOKEN: /* NOMBRE DE CONDICIONES */
 
 	void faceSouth():
 	{
-	  int f=1;
 	}
 	{
 		g = world.getFacing();
@@ -227,7 +235,6 @@ TOKEN: /* NOMBRE DE CONDICIONES */
 	
 	void faceWest():
 	{
-	  int f=1;
 	}
 	{
 		g = world.getFacing();
@@ -249,7 +256,6 @@ TOKEN: /* NOMBRE DE CONDICIONES */
 
 	void faceEast():
 	{
-	  int f=1;
 	}
 	{ 
 		g = world.getFacing();
@@ -436,6 +442,25 @@ TOKEN: /* NOMBRE DE CONDICIONES */
 		}
 	}
 
+	void FunctionDefinition(StringBuffer sistema)
+	{
+		salida= new String();
+	}
+	{
+		(< DEFUN >	palabra()" " < PI > params() < PD> bloque() { salida="Funcion Definicion"; })
+		{
+			sistema.append(salida);
+		} 
+	}
+
+	void params():
+	{
+	  
+	}
+	{
+	  
+	}
+	
 	/**
 	 *  reconoce un numero entero sin signo
 	 * @return el valor entero correspondiente al valor reconocido
