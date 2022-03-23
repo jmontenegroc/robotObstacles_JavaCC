@@ -142,7 +142,7 @@ TOKEN :
 		|  <T_RECOGER> "("  objetoRecoger()  ")"
 		| < MOVEDIR > "(" x=numero() direccion(x)")"
 		//| < RUNDIR > "(" dirs() ")"
-		| < MOVE_FACE > "(" moveFace(x) ")"
+		| < MOVE_FACE > "(" moveFace() ")"
 	    |  < T_POP > "(" x=numero() ")" {world.popBalloons(x); salida = "Command:  Pop";}
 		) "\n" 
 
@@ -261,7 +261,8 @@ TOKEN :
 	  (		<FRONT> { world.moverForward(x); salida= "Command: MoveDir Front"; })
 		| (<RIGHT> { world.turnRight(); world.moveForward(x); salida="Command: MoveDir Right" ;})
 		| (<LEFT> { world.turnRight();world.turnRight();world.turnRight();world.moverForward(x);salidad="Command: Movedir Left" ;})
-		| (<BACK >  { world.turnRight();world.turnRight(); world.moverForward(x); salida = "Command: MovDir Back" ;})	 }
+		| (<BACK >  { world.turnRight();world.turnRight(); world.moverForward(x); salida = "Command: MovDir Back" ;})
+	 }
 
 
 	void objetoPoner() :
@@ -300,6 +301,8 @@ TOKEN :
 	{
 	  ( <NORTH> "," f=numero() "," faceNorth() { world.moveFoward(f); salida= "Command: MoveFace North"; })
 	| (< SOUTH > "," f=numero() "," faceSouth() { world.moveFoward(f);salida="Command: MoveFace South"; })
+	| (< WEST > "," f=numero() "," faceWest() { world.moveFoward(f);salida="Command: MoveFace West"; })
+	| (< EAST > "," f=numero() "," faceEast() { world.moveFoward(f);salida="Command: MoveFace East"; })
 	}
 
 
