@@ -167,16 +167,16 @@ TOKEN :
 	}
 	{
 		g = world.getFacing()
-		if (g == < NORTH >):
+		if (g.equalsIgnoreCase("NORTH")):
 			( {salida="Command: FaceNorth";})
-		else if (g== <SOUTH>):
+		else if (g.equalsIgnoreCase("SOUTH")):
 			( {world.turnRight();
 				world.turnRight();
 				salida= "Command: FaceNorth";})
-		else if(g== <EAST>):
+		else if(g.equalsIgnoreCase("EAST")):
 			( {world.turnRight();
 				salida= "Command: FaceNorth";})
-		else if(g==< WEST>):
+		else if(g.equalsIgnoreCase("WEST")):
 		({world.turnRight();
 		  	world.turnRight();
 		 	 world.turnRight();
@@ -190,16 +190,16 @@ TOKEN :
 	}
 	{
 		g = world.getFacing()
-		if (g == < SOUTH >):
+		if (g.equalsIgnoreCase("SOUTH")):
 			({salida="Command: FaceSouth";})
-		else if(g== <NORTH>):
+		else if(g.equalsIgnoreCase("NORTH")):
 			( {world.turnRight();
 				world.turnRight();
 				salida= "Command: FaceSouth";})
-		else if(g== <WEST>):
+		else if(g.equalsIgnoreCase("WEST")):
 			( {world.turnRight();
 				salida= "Command: FaceSouth";})
-		else if(g==<EAST>):
+		else if(g.equalsIgnoreCase("EAST")):
 		({world.turnRight();
 		  	world.turnRight();
 		 	 world.turnRight();
@@ -213,16 +213,16 @@ TOKEN :
 	}
 	{
 		g = world.getFacing()
-		if (g == <WEST>):
+		if (g.equalsIgnoreCase("WEST")):
 			({salida="Command: FaceWest";})
-		else if(g== <EAST>):
+		else if(g.equalsIgnoresCase("EAST")):
 			( {world.turnRight();
 				world.turnRight();
 				salida= "Command: FaceWest";})
-		else if(g== <NORTH>):
+		else if(g.equalsIgnoreCase("NORTH")):
 			( {world.turnRight();
 				salida= "Command: FaceWest";})
-		else if(g==< SOUTH>):
+		else if(g.equalsIgnoreCase("SOUTH")):
 		({world.turnRight();
 		  	world.turnRight();
 		 	 world.turnRight();
@@ -233,24 +233,23 @@ TOKEN :
 	{
 	  int f=1;
 	}
-	{
+	{ 
 		g = world.getFacing()
-		if (g == <EAST> ):
+		if (g.equalsIgnoreCase("EAST")):
 			( {salida="Command: FaceEast";})
-		else if(g== <WEST>):
+		else if(g/equalsIgnoreCase("WEST")):
 			( {world.turnRight();
 				world.turnRight();
 				salida= "Command: FaceEast";})
-		else if(g== <SOUTH>):
+		else if(g.equalsIgnoreCase("SOUTH")):
 			( {world.turnRight();
 				salida= "Command: FaceEast";})
-		else if(g==<NORTH>):
+		else if(g.equalsIgnoreCase("NORTH")):
 		({world.turnRight();
 		  	world.turnRight();
 		 	 world.turnRight();
 				salida= "Command: FaceEast"; })		  
 	}
-
 
 
 	void direccion(x):
