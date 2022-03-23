@@ -82,8 +82,7 @@ TOKEN: /* Nombres de Comandos */
 		|  < RUNDIR: "run-dirs" >
 		|  < MOVE_FACE: "move-face" >
 		| < LOOP: "loop" >
-
-		
+		| < REPEAT: "repeat" >
 }
 
 TOKEN :
@@ -118,6 +117,15 @@ TOKEN :
 		| < #LETTER: ["a"-"z"] >	
 }
 
+TOKEN: /* NOMBRE DE CONDICIONES */
+{
+		< FACING : "facing-p" >
+		|< PUT_P: "can-put-p" >
+		| < PICK_P: "can-pick-p" >
+		| < MOVE_P: "can-pick-p">
+		| < NOT_COND: "not cond" > 
+}
+
 
 	boolean command(StringBuffer sistema) :
 	{	
@@ -142,7 +150,7 @@ TOKEN :
 		|  <T_PONER> "("  objetoPoner() ")"					  			
 		|  <T_RECOGER> "("  objetoRecoger()  ")"
 		| < MOVEDIR > "(" x=numero() direccion(x)")"
-		//| < RUNDIR > "(" dirs() ")"
+		| < RUNDIR > <PI >  m <PD> dirs(m)
 		| < MOVE_FACE > "(" moveFace() ")"
 	    |  < T_POP > "(" x=numero() ")" {world.popBalloons(x); salida = "Command:  Pop";}
 		) "\n" 
@@ -163,12 +171,20 @@ TOKEN :
 		| <EOF> {return false;} 
 	}
 
+	void dirs(m):
+	{
+		lista = new String()
+	}
+	{
+		lista.append(m) { salida= "Command: Rundirs" ;};
+	}
+	
 	void faceNorth():
 	{
 	  int f=1;
 	}
 	{
-		g = world.getFacing()
+		g = world.getFacing();
 		if (g.equalsIgnoreCase("NORTH")):
 			( {salida="Command: FaceNorth";})
 		else if (g.equalsIgnoreCase("SOUTH")):
@@ -191,7 +207,7 @@ TOKEN :
 	  int f=1;
 	}
 	{
-		g = world.getFacing()
+		g = world.getFacing();
 		if (g.equalsIgnoreCase("SOUTH")):
 			({salida="Command: FaceSouth";})
 		else if(g.equalsIgnoreCase("NORTH")):
@@ -214,7 +230,7 @@ TOKEN :
 	  int f=1;
 	}
 	{
-		g = world.getFacing()
+		g = world.getFacing();
 		if (g.equalsIgnoreCase("WEST")):
 			({salida="Command: FaceWest";})
 		else if(g.equalsIgnoresCase("EAST")):
@@ -236,7 +252,7 @@ TOKEN :
 	  int f=1;
 	}
 	{ 
-		g = world.getFacing()
+		g = world.getFacing();
 		if (g.equalsIgnoreCase("EAST")):
 			( {salida="Command: FaceEast";})
 		else if(g/equalsIgnoreCase("WEST")):
@@ -292,7 +308,7 @@ TOKEN :
 		String name;
 	}
 	{
-
+		(		  < WORD >)+
 	}
 
 	void moveface():
@@ -307,35 +323,118 @@ TOKEN :
 	}
 
 
-	void conditional ():
+	void conditional (StringBuffer sistema):
 	{
-		int x; 
+	  salidad= new String();
 	}
 	{
-		(< IF > "(" condicion() ")" block1 block2 )
+	  bloq1 = bloque();
+	  bloq2 = bloque():
+		if (condition()==true):
+			(< IF > "(" condition()")" bloque1 { salida= "Condicional bloque1"; })
+		else :
+			(< IF > "(" condicion() ")" bloque2 { salida= "Condicional bloque2"; })
+		{
+		  sistema.append(salida)
+		}
 	}
-
-	boolean condicion(
 
 
 	
-	void bloques():
+	void bloque():
 	{}
 	{
-		( "(" + command() + ")" )	
+		( "(" + (command())+  + ")" )	
 	}
 
 
-	void repeat()
-	{}
+	void repeat(StringBuffer sistema)
 	{
+		sistema= new String();
+	  }
+	{
+	
 			< LOOP >  while ( condition() != True) {
-			  bloque
+			  "(" bloque() ")";
+			} { salida= "Repeticion cond TRUE" ;}
+			{
+			  sistema.append(salida);
 			}
-			
+	}
+
+	boolean condition(StringBuffer sistema):
+	{
+	  boolean e;
+	  sistema= new String();
+	
+	}
+	{
+	  (	    < FACING > "(" e=compare()  ")"
+	    	return e 
+	    )
+	  | (< PUT_P >)
+	  |(< PICK_P >)
+	  | (< MOVE_P >)
+	  | (< NOT_COND >)
+
+	  {
+	    sitema.append(salida);
+	    }
+	} 
+
+	boolean compare():
+	{
+	  boolean e;
+	}
+	{
+	  { g = world.getFacing(); }
+		(< NORTH >
+		if (g.equalsIgnoreCase("NORTH")):
+			e=true;
+			({ salida="Condicion Face TRUE" ;})
+		else
+			e= false;
+		return e;
+		)
+		|(< SOUTH >
+		if (g.equalsIgnoreCase("SOUTH")):
+			e=true;
+			  { salida="Condicion Face TRUE" ;}
+		else:
+			e=false;
+		return e; )
+		|( < EAST >
+		if (g.equalsIgnoreCase("EAST")):
+			e=true;
+			 (			   { salida="Condicion Face TRUE" ;})
+		else:
+			e=false;
+		return e;)
+		| (	<WEST>
+		if (g.equalsIgnoreCase("WEST")):
+			e=true;
+			  { salida="Condicion Face TRUE" ;}
+		else:
+			e=false
+		return e;
+			 )
 	}
 	
 	
+	void repeatTimes(StringBuffer sistema):
+	{
+	  int x;
+	  sistema = new String();
+	}
+	{
+			< REPEAT >  "(" x = numero() ")"
+			for (int i = 0; i<x ;i++):
+				bloque();
+			{ salida="Repeticion bloque n veces" ;}
+		{
+		  sistema.append(salida)
+		}
+	}
 
 	/**
 	 *  reconoce un numero entero sin signo
