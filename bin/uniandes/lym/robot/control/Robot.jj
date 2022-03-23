@@ -81,6 +81,7 @@ TOKEN: /* Nombres de Comandos */
 		| < MOVEDIR :"move-dir" >
 		|  < RUNDIR: "run-dirs" >
 		|  < MOVE_FACE: "move-face" >
+		| < LOOP: "loop" >
 		
 }
 
@@ -300,6 +301,37 @@ TOKEN :
 	  ( <NORTH> "," f=numero() "," faceNorth() { world.moveFoward(f); salida= "Command: MoveFace North"; })
 	| (< SOUTH > "," f=numero() "," faceSouth() { world.moveFoward(f);salida="Command: MoveFace South"; })
 	}
+
+
+	void conditional ():
+	{
+		int x; 
+	}
+	{
+		(< IF > "(" condicion() ")" block1 block2 )
+	}
+
+	boolean condicion(
+
+
+	
+	void bloques():
+	{}
+	{
+		( "(" + command() + ")" )	
+	}
+
+
+	void repeat()
+	{}
+	{
+			< LOOP >  while ( condition() != True) {
+			  bloque
+			}
+			
+	}
+	
+	
 
 	/**
 	 *  reconoce un numero entero sin signo
