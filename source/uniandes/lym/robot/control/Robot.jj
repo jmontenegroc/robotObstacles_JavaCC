@@ -141,7 +141,7 @@ TOKEN :
 		|  <T_RECOGER> "("  objetoRecoger()  ")"
 		| < MOVEDIR > "(" x=numero() direccion(x)")"
 		//| < RUNDIR > "(" dirs() ")"
-		| < MOVE_FACE > "(" x=numero() ")"  "(" moveFace(x) ")"
+		| < MOVE_FACE > "(" moveFace(x) ")"
 	    |  < T_POP > "(" x=numero() ")" {world.popBalloons(x); salida = "Command:  Pop";}
 		) "\n" 
 
@@ -291,7 +291,15 @@ TOKEN :
 	{
 
 	}
-	
+
+	void moveface():
+	{
+		int f = 1;
+	}
+	{
+	  ( <NORTH> "," f=numero() "," faceNorth() { world.moveFoward(f); salida= "Command: MoveFace North"; })
+	| (< SOUTH > "," f=numero() "," faceSouth() { world.moveFoward(f);salida="Command: MoveFace South"; })
+	}
 
 	/**
 	 *  reconoce un numero entero sin signo
