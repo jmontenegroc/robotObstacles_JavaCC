@@ -65,26 +65,55 @@ TOKEN: /* Nombres de Comandos */
 {
 
 			<T_MOVER:  "Move">
-		| 	<T_TURNRIGHT: "TURNRIGHT">
+		| 	<T_TURN: "Turn">
 		| 	<T_PONER: "Put">
 		| 	<T_RECOGER: "Pick">
 		|  < T_POP: "Pop" >
+		| < T_run : "Run" >
+		| < PI:"(" >
+		| < PD: ")" >
+		| < FACE: "face" >
+		| < IF: "if" >
+		| < NOT: "not" >
+		| < DEFVAR: "defvar" >
+		| < UNIFY :"=" >
+		| < DEFUN :"defun" >
+		| < MOVEDIR :"move-dir" >
+		|  < RUNDIR: "run-dirs" >
+		|  < MOVE_FACE: "move-face" >
 		
-
 }
 
 TOKEN :
 {
 		<T_BALLOONS:  "BALLOONS" >
 		|	<T_CHIPS:     "CHIPS"  >	
-
 }
 
+TOKEN : /* CONSTANTE */
+{
+		<NORTH:"North" >
+		| < SOUTH: "South" >
+		| < EAST: "East" >
+		| < WEST: "West" > 
+}
+
+TOKEN:
+{
+		< LEFT:"left" >
+		|< RIGHT: "right" >
+		| < AROUND: "around" >
+		| < FRONT: "front" >
+		|	< BACK: "back" >
+		
+}
 
 TOKEN :
 {
 		<NUMERO: (<DIGIT>)+ >
 		|  	<#DIGIT: ["0"-"9"] >
+		< WORD: (< LETTER >)+ >
+		| < #LETTER: ["a"-"z"] >	
 }
 
 
@@ -98,11 +127,22 @@ TOKEN :
 	
 	{
 		(
-		   <T_TURNRIGHT> "(" ")" {world.turnRight();salida = "Command: Turnright";}
-		| 	<T_MOVER>  "(" x=numero() ")" {world.moveForward(x);salida = "Command: Moveforward ";}  
+		  < DEFVAR > "(" l=palabra() ")" "(" x=numero() ")"; { salida= "Command: defvar";}
+		| < UNIFY > "(" l= palabra() ")" "(" x=numero() ")"; { salida="Command: Assigment";}
+		|<T_TURN><RIGHT> "(" ")" {world.turnRight();salida = "Command: Turnright";}
+		|<T_TURN><LEFT> "(" ")" {world.turnRight();world.turnRight();world.turnRight();salida = "Command: Turnleft";}
+		|<T_TURN><AROUND> "(" ")" {world.turnRight();world.turnRight();salida = "Command: Turnaround";}
+		| <T_MOVER>  "(" x=numero() ")" {world.moveForward(x);salida = "Command: Moveforward ";}
+		| <FACE> <NORTH > "(" faceNorth() ")"
+		| <FACE> <SOUTH>  "(" faceNorth() ")"
+		| <FACE> <EAST>  "(" faceNorth() ")"
+		| <FACE> <WEST>  "(" faceNorth() ")"
 		|  <T_PONER> "("  objetoPoner() ")"					  			
-		|  <T_RECOGER> "("  objetoRecoger()  ")"	
-	    |  < T_POP > "(" x=numero() ")" {world.popBalloons(x); salida = "Comando:  Pop";}
+		|  <T_RECOGER> "("  objetoRecoger()  ")"
+		| < MOVEDIR > "(" x=numero() direccion(x)")"
+		//| < RUNDIR > "(" dirs() ")"
+		| < MOVE_FACE > "(" x=numero() ")"  "(" moveFace(x) ")"
+	    |  < T_POP > "(" x=numero() ")" {world.popBalloons(x); salida = "Command:  Pop";}
 		) "\n" 
 
 		{
@@ -121,6 +161,109 @@ TOKEN :
 		| <EOF> {return false;} 
 	}
 
+	void faceNorth():
+	{
+	  int f=1;
+	}
+	{
+		g = world.getFacing()
+		if (g == < NORTH >):
+			( {salida="Command: FaceNorth";})
+		else if (g== <SOUTH>):
+			( {world.turnRight();
+				world.turnRight();
+				salida= "Command: FaceNorth";})
+		else if(g== <EAST>):
+			( {world.turnRight();
+				salida= "Command: FaceNorth";})
+		else if(g==< WEST>):
+		({world.turnRight();
+		  	world.turnRight();
+		 	 world.turnRight();
+				salida= "Command: FaceNorth"; })		  
+	}
+
+
+	void faceSouth():
+	{
+	  int f=1;
+	}
+	{
+		g = world.getFacing()
+		if (g == < SOUTH >):
+			({salida="Command: FaceSouth";})
+		else if(g== <NORTH>):
+			( {world.turnRight();
+				world.turnRight();
+				salida= "Command: FaceSouth";})
+		else if(g== <WEST>):
+			( {world.turnRight();
+				salida= "Command: FaceSouth";})
+		else if(g==<EAST>):
+		({world.turnRight();
+		  	world.turnRight();
+		 	 world.turnRight();
+				salida= "Command: FaceSouth"; })		  
+	}
+
+	
+	void faceWest():
+	{
+	  int f=1;
+	}
+	{
+		g = world.getFacing()
+		if (g == <WEST>):
+			({salida="Command: FaceWest";})
+		else if(g== <EAST>):
+			( {world.turnRight();
+				world.turnRight();
+				salida= "Command: FaceWest";})
+		else if(g== <NORTH>):
+			( {world.turnRight();
+				salida= "Command: FaceWest";})
+		else if(g==< SOUTH>):
+		({world.turnRight();
+		  	world.turnRight();
+		 	 world.turnRight();
+				salida= "Command: FaceWest"; })		  
+	}
+
+	void faceEast():
+	{
+	  int f=1;
+	}
+	{
+		g = world.getFacing()
+		if (g == <EAST> ):
+			( {salida="Command: FaceEast";})
+		else if(g== <WEST>):
+			( {world.turnRight();
+				world.turnRight();
+				salida= "Command: FaceEast";})
+		else if(g== <SOUTH>):
+			( {world.turnRight();
+				salida= "Command: FaceEast";})
+		else if(g==<NORTH>):
+		({world.turnRight();
+		  	world.turnRight();
+		 	 world.turnRight();
+				salida= "Command: FaceEast"; })		  
+	}
+
+
+
+	void direccion(x):
+	{
+	  int f=1;
+	}
+	{
+	  (		<FRONT> { world.moverForward(x); salida= "Command: MoveDir Front"; })
+		| (<RIGHT> { world.turnRight(); world.moveForward(x); salida="Command: MoveDir Right" ;})
+		| (<LEFT> { world.turnRight();world.turnRight();world.turnRight();world.moverForward(x);salidad="Command: Movedir Left" ;})
+		| (<BACK >  { world.turnRight();world.turnRight(); world.moverForward(x); salida = "Command: MovDir Back" ;})	 }
+
+
 	void objetoPoner() :
 	{
 		int f=1;	
@@ -130,6 +273,7 @@ TOKEN :
 		|  	  ( <T_BALLOONS>   "," f=numero() {world.putBalloons(f); salida = "Command:  Put Balloons";})	 
 
 	}
+
 
 	void objetoRecoger() :
 	{
@@ -141,7 +285,13 @@ TOKEN :
 
 	}
 
-	
+	void palabra():
+	{
+		String name;
+	}
+	{
+
+	}
 	
 
 	/**
