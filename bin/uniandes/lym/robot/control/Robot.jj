@@ -81,6 +81,7 @@ TOKEN: /* Nombres de Comandos */
 		| < MOVEDIR :"move-dir" >
 		|  < RUNDIR: "run-dirs" >
 		|  < MOVE_FACE: "move-face" >
+
 		
 }
 
@@ -141,7 +142,7 @@ TOKEN :
 		|  <T_RECOGER> "("  objetoRecoger()  ")"
 		| < MOVEDIR > "(" x=numero() direccion(x)")"
 		//| < RUNDIR > "(" dirs() ")"
-		| < MOVE_FACE > "(" moveFace(x) ")"
+		| < MOVE_FACE > "(" moveFace() ")"
 	    |  < T_POP > "(" x=numero() ")" {world.popBalloons(x); salida = "Command:  Pop";}
 		) "\n" 
 
@@ -299,6 +300,8 @@ TOKEN :
 	{
 	  ( <NORTH> "," f=numero() "," faceNorth() { world.moveFoward(f); salida= "Command: MoveFace North"; })
 	| (< SOUTH > "," f=numero() "," faceSouth() { world.moveFoward(f);salida="Command: MoveFace South"; })
+	| (< WEST > "," f=numero() "," faceWest() { world.moveFoward(f);salida="Command: MoveFace West"; })
+	| (< EAST > "," f=numero() "," faceEast() { world.moveFoward(f);salida="Command: MoveFace East"; })
 	}
 
 	/**
